@@ -11,28 +11,29 @@ import UIKit
 class MoviesViewController: UIViewController {
     
     
-    //moviesDB API KEY
-    let clientId: String = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-    
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
     
-    let movies = ["Chopped, RealityShow", "Mysteries of Laura, Crime", "Supernatural, Horror", "Padaiyappa, superhit","Pokiri, Action","iZombie, Crime"]
-    
+    private var movies = [Movie]()
     
     @IBOutlet weak var moviesTableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
+        moviesTableView.estimatedRowHeight = 500
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
-
+        MoviesAPI.sharedInstance.fetchNowPlayingMovies(reloadMovieTable)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    }
+    
+    func reloadMovieTable(fetchedMovies: [Movie]){
+        self.movies = fetchedMovies
+        moviesTableView!.reloadData()
     }
     
 }
@@ -44,9 +45,9 @@ extension MoviesViewController:UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableCellId, forIndexPath: indexPath) as! MovieOverviewCell
-        let movie = movies[indexPath.row].componentsSeparatedByString(", ") // Should remove later
-        cell.titleLabel.text = movie.first //use proper ones
-        cell.overviewLabel.text = movie.last //use proper ones
+        let movie = movies[indexPath.row]
+        cell.titleLabel.text = movie.title
+        cell.overviewLabel.text = movie.overview
         return cell
     }
 }

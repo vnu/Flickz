@@ -41,27 +41,27 @@ class Movie {
     var adult: Bool
     var overview: String
     var releaseDate: String
-    var genreId: Array<Int>
-    var ID: Int32
+    var genreIds: Array<Int>
+    var ID: Int
     var originalTitle: String
     var originalLanguage: String
     var title: String
     var backdropPath: String
     var popularity: Double
-    var voteCount: Int16
+    var voteCount: Int
     var video: Bool
     var voteAverage: Double
     
 
     // MARK: Initialization
 
-    init(posterPath: String, adult: Bool, overview: String, releaseDate: String, genreId: Array<Int>, ID: Int32, originalTitle: String, originalLanguage: String, title: String, backdropPath: String, popularity: Double, voteCount: Int16, video: Bool, voteAverage: Double) {
+    init(posterPath: String, adult: Bool, overview: String, releaseDate: String, genreIds: Array<Int>, ID: Int, originalTitle: String, originalLanguage: String, title: String, backdropPath: String, popularity: Double, voteCount: Int, video: Bool, voteAverage: Double) {
          // Initialize stored properties.
         self.posterPath = posterPath
         self.adult = adult
         self.overview = overview
         self.releaseDate = releaseDate
-        self.genreId = genreId
+        self.genreIds = genreIds
         self.ID = ID
         self.originalTitle = originalTitle
         self.originalLanguage = originalLanguage
@@ -71,6 +71,24 @@ class Movie {
         self.voteCount = voteCount
         self.video = video
         self.voteAverage = voteAverage
+    }
+    
+    init(jsonResult: NSDictionary) {
+        // Initialize stored properties.
+        self.posterPath = jsonResult["poster_path"] as! String
+        self.adult = jsonResult["adult"] as! Bool
+        self.overview = jsonResult["overview"] as! String
+        self.releaseDate = jsonResult["release_date"] as! String
+        self.genreIds = jsonResult["genre_ids"] as! Array<Int>
+        self.ID = jsonResult["id"] as! Int
+        self.originalTitle = jsonResult["original_title"] as! String
+        self.originalLanguage = jsonResult["original_language"] as! String
+        self.title = jsonResult["title"] as! String
+        self.backdropPath = jsonResult["backdrop_path"] as! String
+        self.popularity = jsonResult["popularity"] as! Double
+        self.voteCount = jsonResult["vote_count"] as! Int
+        self.video = jsonResult["video"] as! Bool
+        self.voteAverage = jsonResult["vote_average"] as! Double
     }
 
 }
