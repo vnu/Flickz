@@ -21,16 +21,30 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="FLICKZ" id="Azr-1P-yf7">
-                        <barButtonItem key="backBarButtonItem" title="&lt;" id="mgx-WR-P2E"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="FLICKZ" id="Azr-1P-yf7"/>
                     <connections>
                         <outlet property="moviesTableView" destination="8uh-ao-R6j" id="in8-yx-l8g"/>
+                        <segue destination="Qay-v1-f6p" kind="push" identifier="MovieDetailSegue" id="1ej-xH-xSC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="713" y="406"/>
+        </scene>
+        <!--Movie Detail View Controller-->
+        <scene sceneID="bap-OG-Yhc">
+            <objects>
+                <viewController id="Qay-v1-f6p" customClass="MovieDetailViewController" customModule="Flickz" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OcM-e1-0LZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="F24-dx-T3q"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mqU-xk-wKv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1207" y="404"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6rC-92-cv0">

@@ -14,6 +14,7 @@ class MoviesViewController: UIViewController {
     
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
+    let detailSegueId:String = "MovieDetailSegue"
     
     private var movies = [Movie]()
     
@@ -54,6 +55,22 @@ extension MoviesViewController:UITableViewDataSource {
         }
 
         return cell
+    }
+
+    //New
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == detailSegueId {
+            if let destination = segue.destinationViewController as? MovieDetailViewController {
+                if let indexPath = self.moviesTableView.indexPathForSelectedRow{
+                    destination.movie = movies[indexPath.row]
+                }
+            }
+        }
+    }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier(detailSegueId, sender: self)
     }
 }
 
