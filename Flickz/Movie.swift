@@ -37,7 +37,7 @@ class Movie {
 
     // MARK: Properties
     
-    var posterPath: String
+    var posterPath: String?
     var adult: Bool
     var overview: String
     var releaseDate: String
@@ -46,7 +46,7 @@ class Movie {
     var originalTitle: String
     var originalLanguage: String
     var title: String
-    var backdropPath: String
+    var backdropPath: String?
     var popularity: Double
     var voteCount: Int
     var video: Bool
@@ -75,7 +75,7 @@ class Movie {
     
     init(jsonResult: NSDictionary) {
         // Initialize stored properties.
-        self.posterPath = jsonResult["poster_path"] as! String
+        self.posterPath = jsonResult["poster_path"] as? String
         self.adult = jsonResult["adult"] as! Bool
         self.overview = jsonResult["overview"] as! String
         self.releaseDate = jsonResult["release_date"] as! String
@@ -84,12 +84,29 @@ class Movie {
         self.originalTitle = jsonResult["original_title"] as! String
         self.originalLanguage = jsonResult["original_language"] as! String
         self.title = jsonResult["title"] as! String
-        self.backdropPath = jsonResult["backdrop_path"] as! String
+        self.backdropPath = jsonResult["backdrop_path"] as? String
         self.popularity = jsonResult["popularity"] as! Double
         self.voteCount = jsonResult["vote_count"] as! Int
         self.video = jsonResult["video"] as! Bool
         self.voteAverage = jsonResult["vote_average"] as! Double
     }
+    
+    func lowResPosterURL() -> NSURL?{
+        let baseUrl = "https://image.tmdb.org/t/p/w45"
+        if let posterPath = self.posterPath{
+            return NSURL(string:"\(baseUrl)\(posterPath)")!
+        }
+        return nil
+    }
+    
+    func highResPosterURL() -> NSURL?{
+        let baseUrl = "https://image.tmdb.org/t/p/original"
+        if let posterPath = self.posterPath{
+            return NSURL(string:"\(baseUrl)\(posterPath)")!
+        }
+        return nil
+    }
+
 
 }
 

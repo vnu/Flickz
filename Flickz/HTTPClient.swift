@@ -13,7 +13,6 @@ class HTTPClient {
     
     //moviesDB API KEY
     static let apiKey: String = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-    
     let baseUrl = "https://api.themoviedb.org/3/movie/"
     
     private let params = ["api_key": apiKey]

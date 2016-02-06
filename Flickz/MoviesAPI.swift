@@ -32,4 +32,20 @@ class MoviesAPI {
         httpClient.fetch(url, successCallback: successCallback, error: nil)
     }
     
+    func fetchTopRatedMovies(successCallback: ([Movie]) -> Void){
+        let url = httpClient.buildUrl("top_rated")
+        httpClient.fetch(url, successCallback: successCallback, error: nil)
+    }
+    
+    func fetchUpcomingMovies(successCallback: ([Movie]) -> Void){
+        let url = httpClient.buildUrl("upcoming")
+        httpClient.fetch(url, successCallback: successCallback, error: nil)
+    }
+    
+    func fetchPopularMovies(successCallback: ([Movie]) -> Void){
+        let url = httpClient.buildUrl("popular")
+        httpClient.fetch(url, successCallback: successCallback, error: nil)
+    }
+
+    
 }
