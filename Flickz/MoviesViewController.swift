@@ -14,8 +14,8 @@ class MoviesViewController: UIViewController {
     //moviesDB API KEY
     let clientId: String = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
     
+    //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
-//    let tableCellId:String = "com.vnu.movieCell"
     
     let movies = ["Chopped, RealityShow", "Mysteries of Laura, Crime", "Supernatural, Horror", "Padaiyappa, superhit","Pokiri, Action","iZombie, Crime"]
     
