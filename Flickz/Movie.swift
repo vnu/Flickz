@@ -92,7 +92,7 @@ class Movie {
     }
     
     func lowResPosterURL() -> NSURL?{
-        let baseUrl = "https://image.tmdb.org/t/p/w45"
+        let baseUrl = "https://image.tmdb.org/t/p/w92"
         if let posterPath = self.posterPath{
             return NSURL(string:"\(baseUrl)\(posterPath)")!
         }

@@ -25,7 +25,7 @@ class MoviesViewController: UIViewController {
         moviesTableView.estimatedRowHeight = 500
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
-        MoviesAPI.sharedInstance.fetchUpcomingMovies(reloadMovieTable)
+        MoviesAPI.sharedInstance.fetchNowPlayingMovies(reloadMovieTable)
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +49,7 @@ extension MoviesViewController:UITableViewDataSource {
         let movie = movies[indexPath.row]
         cell.titleLabel.text = movie.title
         cell.overviewLabel.text = movie.overview
-        if let posterURL = movie.highResPosterURL(){
+        if let posterURL = movie.lowResPosterURL(){
             cell.posterImage.setImageWithURL(posterURL)
         }
 
