@@ -48,6 +48,7 @@ extension MoviesViewController:UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableCellId, forIndexPath: indexPath) as! MovieOverviewCell
         let movie = movies[indexPath.row]
+        cell.selectionStyle = .None
         cell.movieTitleLabel.text = movie.title
         cell.movieOverviewLabel.text = movie.overview
         if let posterURL = movie.lowResPosterURL(){
@@ -64,13 +65,21 @@ extension MoviesViewController:UITableViewDataSource {
             if let destination = segue.destinationViewController as? MovieDetailViewController {
                 if let indexPath = self.moviesTableView.indexPathForSelectedRow{
                     destination.movie = movies[indexPath.row]
+                    self.moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
                 }
             }
         }
     }
-
+    
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
+        selectedCell.movieTitleLabel.textColor = UIColor.yellowColor()
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.performSegueWithIdentifier(detailSegueId, sender: self)
+        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
+        selectedCell.movieTitleLabel.textColor = UIColor.cyanColor()
     }
 }
 
