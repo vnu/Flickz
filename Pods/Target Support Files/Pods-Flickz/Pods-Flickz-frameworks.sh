@@ -85,7 +85,9 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Flickz/AFNetworking.framework"
+  install_framework "Pods-Flickz/MBProgressHUD.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Flickz/AFNetworking.framework"
+  install_framework "Pods-Flickz/MBProgressHUD.framework"
 fi

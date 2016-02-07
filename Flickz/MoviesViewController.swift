@@ -8,6 +8,8 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
+
 
 class MoviesViewController: UIViewController {
     
@@ -17,25 +19,49 @@ class MoviesViewController: UIViewController {
     let detailSegueId:String = "MovieDetailSegue"
     
     private var movies = [Movie]()
+    var refreshControl:UIRefreshControl!
+    var initialLoad:Bool = true
     
     @IBOutlet weak var moviesTableView: UITableView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        initMovieTable()
+        loadMovies()
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
+    }
+    
+    func initMovieTable(){
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
-        moviesTableView.estimatedRowHeight = 500
+        moviesTableView.estimatedRowHeight = 200
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
-        MoviesAPI.sharedInstance.fetchNowPlayingMovies(reloadMovieTable)
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    func reloadMovieTable(fetchedMovies: [Movie]){
+    func loadMovies(){
+        MoviesAPI.sharedInstance.fetchNowPlayingMovies(updateMovieTable)
+    }
+    
+    func updateMovieTable(fetchedMovies: [Movie]){
         self.movies = fetchedMovies
         moviesTableView!.reloadData()
+        if(initialLoad){
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
+        }else{
+            refreshControl.endRefreshing()
+        }
+    }
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        initialLoad = false
+        loadMovies()
     }
     
 }
@@ -54,10 +80,10 @@ extension MoviesViewController:UITableViewDataSource {
         if let posterURL = movie.lowResPosterURL(){
             cell.moviePosterImage.setImageWithURL(posterURL)
         }
-
+        
         return cell
     }
-
+    
     //New
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -75,6 +101,12 @@ extension MoviesViewController:UITableViewDataSource {
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
         selectedCell.movieTitleLabel.textColor = UIColor.yellowColor()
     }
+    
+    func tableView(tableView: UITableView, didUnHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
+        selectedCell.movieTitleLabel.textColor = UIColor.cyanColor()
+    }
+    
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.performSegueWithIdentifier(detailSegueId, sender: self)
