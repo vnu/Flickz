@@ -138,13 +138,29 @@ class MoviesViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == detailSegueId {
             if let destination = segue.destinationViewController as? MovieDetailViewController {
-                if let indexPath = self.moviesTableView.indexPathForSelectedRow{
-                    destination.movie = movies[indexPath.row]
-                    self.moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
+                if let indexRow = getIndexPath(sender){
+                    destination.movie = movies[indexRow]
                 }
                 destination.hidesBottomBarWhenPushed = true
             }
         }
+    }
+    
+    func getIndexPath(sender: AnyObject?) -> Int?{
+        var index:Int? = nil
+        if isGridView(){
+            if let cell = sender as? MoviePosterCell{
+                let indexPath = self.moviesCollectionView!.indexPathForCell(cell)
+                index = indexPath!.row
+            }
+        }else{
+            if let cell = sender as? MovieOverviewCell{
+                let indexPath = self.moviesTableView!.indexPathForCell(cell)
+                index = indexPath!.row
+            }
+        }
+        return index
+
     }
     
 }
@@ -160,10 +176,13 @@ extension MoviesViewController:UICollectionViewDataSource{
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(gridCellId, forIndexPath: indexPath) as! MoviePosterCell
         let movie = movies[indexPath.item]
-        if let posterURL = movie.lowResPosterURL(){
-            cell.moviePosterImage.setImageWithURL(posterURL)
-        }
+        MoviesAPI.sharedInstance.loadPosterImage(movie, posterImage: cell.moviePosterImage)
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell = collectionView.cellForItemAtIndexPath(indexPath) as! MoviePosterCell
+        self.performSegueWithIdentifier(detailSegueId, sender: selectedCell)
     }
     
 }
@@ -184,9 +203,7 @@ extension MoviesViewController:UITableViewDataSource {
         cell.selectionStyle = .None
         cell.movieTitleLabel.text = movie.title
         cell.movieOverviewLabel.text = movie.overview
-        if let posterURL = movie.lowResPosterURL(){
-            cell.moviePosterImage.setImageWithURL(posterURL)
-        }
+        MoviesAPI.sharedInstance.loadPosterImage(movie, posterImage: cell.moviePosterImage)
         return cell
     }
     
@@ -202,9 +219,10 @@ extension MoviesViewController:UITableViewDataSource {
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier(detailSegueId, sender: self)
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
+        self.performSegueWithIdentifier(detailSegueId, sender: selectedCell)
         selectedCell.movieTitleLabel.textColor = UIColor.cyanColor()
+        
     }
 }
 
