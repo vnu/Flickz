@@ -23,11 +23,13 @@ class MoviesViewController: UIViewController {
     let listView = "listview16"
     
     var currentViewType:String!
-    
+    var searchBar: UISearchBar!
     
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
     let detailSegueId:String = "MovieDetailSegue"
+    var searchBtn:UIBarButtonItem!
+    var cancelSearchBtn:UIBarButtonItem!
     
     //Grid View Cell
     let gridCellId:String = "com.vnu.moviePosterCell"
@@ -36,74 +38,42 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var moviesTableView: UITableView!
     @IBOutlet weak var moviesCollectionView: UICollectionView!
     
+    @IBOutlet weak var switchViewButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideErrorView()
         initMovieViews()
-        setupSwitchView()
+        setupSearchView()
+        setSwitchBtnImage()
         initRefreshControl()
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         loadMovies()
     }
     
-    func setupSwitchView(){
-        currentViewType = listView
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: barItemImage(), style: UIBarButtonItemStyle.Plain, target: self, action: "switchViewTapped")
-    }
-    
-    func isGridView() -> Bool{
-        return currentViewType == gridView
-    }
-    
-    func isListView() -> Bool{
-        return currentViewType == listView
-    }
-    
-    func barItemImage() -> UIImage{
-        return (isGridView() ? UIImage(named: listView)! : UIImage(named: gridView)!)
-    }
-    
-    func switchViewTapped(){
-        if isGridView(){
-            currentViewType = "listview16"
-            moviesCollectionView.hidden = true
-            moviesTableView.hidden = false
-        }else{
-            currentViewType = "gridview16"
-            moviesCollectionView.hidden = false
-            moviesTableView.hidden = true
-        }
-        self.navigationItem.rightBarButtonItem?.image = barItemImage()
-    }
-    
     func initMovieViews(){
+        hideErrorView()
+        
+        //set table and collection datasource and delegates
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
         moviesTableView.estimatedRowHeight = 200
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
         moviesCollectionView.dataSource = self
         moviesCollectionView.delegate = self
-    }
-    
-    func initRefreshControl(){
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = UIColor.cyanColor()
-        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
-        self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
-    }
-    
-    func hideErrorView(){
-        errorView.hidden = true
-    }
-    
-    func showErrorView(error: NSError?){
-        errorView.hidden = false
-        hideProgressBar()
+        
+        //Search
+        searchBtn = UIBarButtonItem(image: UIImage(named: "search"), style: UIBarButtonItemStyle.Plain, target: self, action: "searchTapped")
+        cancelSearchBtn = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "cancelSearch")
+        
+        currentViewType = listView // Set initial type to list view
+        setSwitchBtnImage() // Set the btn image and color
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    //Load Movie Table
     
     func loadMovies(){
         if let moviesType = moviesType{
@@ -111,12 +81,21 @@ class MoviesViewController: UIViewController {
         }
     }
     
-    //Callback view after Network success
     func updateMovieTable(fetchedMovies: [Movie]){
         hideErrorView()
         self.movies = fetchedMovies
         moviesCollectionView!.reloadData()
         moviesTableView!.reloadData()
+        hideProgressBar()
+    }
+    
+    //Loading Bar, Pull to refresh & Error View
+    func hideErrorView(){
+        errorView.hidden = true
+    }
+    
+    func showErrorView(error: NSError?){
+        errorView.hidden = false
         hideProgressBar()
     }
     
@@ -128,10 +107,71 @@ class MoviesViewController: UIViewController {
         }
     }
     
+    func initRefreshControl(){
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.cyanColor()
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
+    }
+    
     func refreshControlAction(refreshControl: UIRefreshControl) {
         initialLoad = false
         loadMovies()
     }
+    
+    //Switch View
+    
+    func isGridView() -> Bool{
+        return currentViewType == gridView
+    }
+    
+    func switchViewImage() -> UIImage{
+        return (isGridView() ? UIImage(named: listView)! : UIImage(named: gridView)!)
+    }
+    
+    func setSwitchBtnImage(){
+        let tintedImage = switchViewImage().imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        switchViewButton.layer.cornerRadius = 0.5 * switchViewButton.bounds.size.width
+        switchViewButton.setImage(tintedImage, forState: .Normal)
+        switchViewButton.tintColor = UIColor.yellowColor()
+    }
+    
+    @IBAction func onSwitchViewPressed(sender: UIButton) {
+        if isGridView(){
+            currentViewType = "listview16"
+            moviesCollectionView.hidden = true
+            moviesTableView.hidden = false
+        }else{
+            currentViewType = "gridview16"
+            moviesCollectionView.hidden = false
+            moviesTableView.hidden = true
+        }
+        setSwitchBtnImage()
+    }
+    
+    //Search Bar
+    func setupSearchView(){
+        self.navigationItem.rightBarButtonItem = searchBtn
+        if let searchBar = searchBar{
+            searchBar.removeFromSuperview()
+        }
+    }
+    
+    func searchTapped(){
+        self.navigationItem.rightBarButtonItem  = cancelSearchBtn
+        searchBar = UISearchBar(frame: CGRectMake(0.0, -80.0, 320.0, 44.0))
+        navigationController?.navigationBar.addSubview(searchBar)
+        searchBar.frame = CGRectMake(0.0, 0, 250, 44)
+    }
+    
+    func cancelSearch(){
+        setupSearchView()
+    }
+    // in viewWillDisappear
+
+    
+    
+    //Segue into Detail View
     
     //New
     // MARK: - Navigation
