@@ -33,6 +33,9 @@ vote_average: 6.05
 }
 */
 
+import Foundation
+import UIKit
+
 class Movie {
 
     // MARK: Properties
@@ -106,7 +109,17 @@ class Movie {
         }
         return nil
     }
-
+    
+    func movieReleaseDate() -> String{
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let movieDate = dateFormatter.dateFromString(self.releaseDate) {
+            dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
+            return dateFormatter.stringFromDate(movieDate)
+        }
+        return "--"
+    }
+   
 
 }
 

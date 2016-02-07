@@ -14,6 +14,7 @@ class MoviesViewController: UIViewController {
     
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
+    let detailSegueId:String = "MovieDetailSegue"
     
     private var movies = [Movie]()
     
@@ -47,13 +48,38 @@ extension MoviesViewController:UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableCellId, forIndexPath: indexPath) as! MovieOverviewCell
         let movie = movies[indexPath.row]
-        cell.titleLabel.text = movie.title
-        cell.overviewLabel.text = movie.overview
+        cell.selectionStyle = .None
+        cell.movieTitleLabel.text = movie.title
+        cell.movieOverviewLabel.text = movie.overview
         if let posterURL = movie.lowResPosterURL(){
-            cell.posterImage.setImageWithURL(posterURL)
+            cell.moviePosterImage.setImageWithURL(posterURL)
         }
 
         return cell
+    }
+
+    //New
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == detailSegueId {
+            if let destination = segue.destinationViewController as? MovieDetailViewController {
+                if let indexPath = self.moviesTableView.indexPathForSelectedRow{
+                    destination.movie = movies[indexPath.row]
+                    self.moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
+                }
+            }
+        }
+    }
+    
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
+        selectedCell.movieTitleLabel.textColor = UIColor.yellowColor()
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier(detailSegueId, sender: self)
+        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
+        selectedCell.movieTitleLabel.textColor = UIColor.cyanColor()
     }
 }
 
