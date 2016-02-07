@@ -18,6 +18,7 @@ class MoviesViewController: UIViewController {
     let tableCellId:String = "vnu.com.movieOverviewCell"
     let detailSegueId:String = "MovieDetailSegue"
     
+    @IBOutlet weak var errorView: UIView!
     private var movies = [Movie]()
     var refreshControl:UIRefreshControl!
     var initialLoad:Bool = true
@@ -26,13 +27,14 @@ class MoviesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideErrorView()
         initMovieTable()
         loadMovies()
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
     }
-    
+
     func initMovieTable(){
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
         moviesTableView.estimatedRowHeight = 200
@@ -41,17 +43,31 @@ class MoviesViewController: UIViewController {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
     }
     
+    func hideErrorView(){
+        errorView.hidden = true
+    }
+    
+    func showErrorView(error: NSError?){
+        errorView.hidden = false
+        hideProgressBar()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func loadMovies(){
-        MoviesAPI.sharedInstance.fetchNowPlayingMovies(updateMovieTable)
+        MoviesAPI.sharedInstance.fetchNowPlayingMovies(updateMovieTable, errorCallback: showErrorView)
     }
     
     func updateMovieTable(fetchedMovies: [Movie]){
+        hideErrorView()
         self.movies = fetchedMovies
         moviesTableView!.reloadData()
+        hideProgressBar()
+    }
+    
+    func hideProgressBar(){
         if(initialLoad){
             MBProgressHUD.hideHUDForView(self.view, animated: true)
         }else{

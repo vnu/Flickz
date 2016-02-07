@@ -27,24 +27,24 @@ class MoviesAPI {
         return [] //persistencyManager.getAlbums()
     }
     
-    func fetchNowPlayingMovies(successCallback: ([Movie]) -> Void){
+    func fetchNowPlayingMovies(successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
         let url = httpClient.buildUrl("now_playing")
-        httpClient.fetch(url, successCallback: successCallback, error: nil)
+        httpClient.fetch(url, successCallback: successCallback, error: errorCallback)
     }
     
-    func fetchTopRatedMovies(successCallback: ([Movie]) -> Void){
+    func fetchTopRatedMovies(successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
         let url = httpClient.buildUrl("top_rated")
-        httpClient.fetch(url, successCallback: successCallback, error: nil)
+        httpClient.fetch(url, successCallback: successCallback, error: errorCallback)
     }
     
-    func fetchUpcomingMovies(successCallback: ([Movie]) -> Void){
+    func fetchUpcomingMovies(successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
         let url = httpClient.buildUrl("upcoming")
-        httpClient.fetch(url, successCallback: successCallback, error: nil)
+        httpClient.fetch(url, successCallback: successCallback, error: errorCallback)
     }
     
-    func fetchPopularMovies(successCallback: ([Movie]) -> Void){
+    func fetchPopularMovies(successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
         let url = httpClient.buildUrl("popular")
-        httpClient.fetch(url, successCallback: successCallback, error: nil)
+        httpClient.fetch(url, successCallback: successCallback, error: errorCallback)
     }
 
     
