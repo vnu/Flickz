@@ -23,7 +23,6 @@ class HTTPClient {
     }
     
     //Fetch using AFNetworking 3.0 AFHTTPSessionManager
-    
     func fetch(resourceUrl:String, successCallback: ([Movie]) -> Void, error: ((NSError?) -> Void)?) {
         let manager = AFHTTPSessionManager();
         //TODO: Figure out what progress is
@@ -39,23 +38,6 @@ class HTTPClient {
                 if let errorCallback = error {
                     errorCallback(requestError)
                 }
-        })
-        
-    }
-    
-    func fetchSimple(resourceUrl:String) {
-        let manager = AFHTTPSessionManager();
-        //TODO: Figure out what progress is
-        manager.GET(resourceUrl, parameters: params, progress: nil, success: { (operation ,responseObject) -> Void in
-            if let results = responseObject!["results"] as? NSArray {
-                var movies: [Movie] = []
-                for result in results as! [NSDictionary] {
-                    movies.append(Movie(jsonResult: result))
-                }
-                NSLog("movies: \(movies[0].title)")
-            }
-            }, failure: { (operation, requestError) -> Void in
-                NSLog("error: \(requestError)")
         })
         
     }
@@ -81,5 +63,7 @@ class HTTPClient {
         });
         task.resume()
     }
+    
+    //Fetch Image
     
 }

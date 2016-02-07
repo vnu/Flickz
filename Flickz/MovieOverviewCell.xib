@@ -33,9 +33,9 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
-                <outlet property="overviewLabel" destination="8cC-9T-hCK" id="zey-Et-pfQ"/>
-                <outlet property="posterImage" destination="jNA-R2-Tr6" id="A50-Ro-SX6"/>
-                <outlet property="titleLabel" destination="uS5-Zo-hxs" id="16C-gk-0Ve"/>
+                <outlet property="movieOverviewLabel" destination="8cC-9T-hCK" id="Ka2-t8-LR6"/>
+                <outlet property="moviePosterImage" destination="jNA-R2-Tr6" id="gT3-wa-cxo"/>
+                <outlet property="movieTitleLabel" destination="uS5-Zo-hxs" id="THS-Ra-Ov6"/>
             </connections>
             <point key="canvasLocation" x="209.5" y="279"/>
         </tableViewCell>

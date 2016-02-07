@@ -48,10 +48,10 @@ extension MoviesViewController:UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableCellId, forIndexPath: indexPath) as! MovieOverviewCell
         let movie = movies[indexPath.row]
-        cell.titleLabel.text = movie.title
-        cell.overviewLabel.text = movie.overview
+        cell.movieTitleLabel.text = movie.title
+        cell.movieOverviewLabel.text = movie.overview
         if let posterURL = movie.lowResPosterURL(){
-            cell.posterImage.setImageWithURL(posterURL)
+            cell.moviePosterImage.setImageWithURL(posterURL)
         }
 
         return cell
