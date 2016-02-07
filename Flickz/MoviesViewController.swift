@@ -19,27 +19,70 @@ class MoviesViewController: UIViewController {
     var initialLoad:Bool = true
     var moviesType:String!
     
+    let gridView = "gridview16"
+    let listView = "listview16"
+    
+    var currentViewType:String!
+    
+    
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
     let detailSegueId:String = "MovieDetailSegue"
     
+    //Grid View Cell
+    let gridCellId:String = "com.vnu.moviePosterCell"
+    
     @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var moviesTableView: UITableView!
+    @IBOutlet weak var moviesCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hideErrorView()
-        initMovieTable()
+        initMovieViews()
+        setupSwitchView()
         initRefreshControl()
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         loadMovies()
     }
     
-    func initMovieTable(){
+    func setupSwitchView(){
+        currentViewType = listView
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: barItemImage(), style: UIBarButtonItemStyle.Plain, target: self, action: "switchViewTapped")
+    }
+    
+    func isGridView() -> Bool{
+        return currentViewType == gridView
+    }
+    
+    func isListView() -> Bool{
+        return currentViewType == listView
+    }
+    
+    func barItemImage() -> UIImage{
+        return (isGridView() ? UIImage(named: listView)! : UIImage(named: gridView)!)
+    }
+    
+    func switchViewTapped(){
+        if isGridView(){
+            currentViewType = "listview16"
+            moviesCollectionView.hidden = true
+            moviesTableView.hidden = false
+        }else{
+            currentViewType = "gridview16"
+            moviesCollectionView.hidden = false
+            moviesTableView.hidden = true
+        }
+        self.navigationItem.rightBarButtonItem?.image = barItemImage()
+    }
+    
+    func initMovieViews(){
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
         moviesTableView.estimatedRowHeight = 200
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        moviesCollectionView.dataSource = self
+        moviesCollectionView.delegate = self
     }
     
     func initRefreshControl(){
@@ -72,6 +115,7 @@ class MoviesViewController: UIViewController {
     func updateMovieTable(fetchedMovies: [Movie]){
         hideErrorView()
         self.movies = fetchedMovies
+        moviesCollectionView!.reloadData()
         moviesTableView!.reloadData()
         hideProgressBar()
     }
@@ -89,8 +133,46 @@ class MoviesViewController: UIViewController {
         loadMovies()
     }
     
+    //New
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == detailSegueId {
+            if let destination = segue.destinationViewController as? MovieDetailViewController {
+                if let indexPath = self.moviesTableView.indexPathForSelectedRow{
+                    destination.movie = movies[indexPath.row]
+                    self.moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
+                }
+                destination.hidesBottomBarWhenPushed = true
+            }
+        }
+    }
+    
 }
 
+
+//Grid View
+
+extension MoviesViewController:UICollectionViewDataSource{
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(gridCellId, forIndexPath: indexPath) as! MoviePosterCell
+        let movie = movies[indexPath.item]
+        if let posterURL = movie.lowResPosterURL(){
+            cell.moviePosterImage.setImageWithURL(posterURL)
+        }
+        return cell
+    }
+    
+}
+
+extension MoviesViewController:UICollectionViewDelegate{
+    
+}
+
+//Table View
 extension MoviesViewController:UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
@@ -105,22 +187,7 @@ extension MoviesViewController:UITableViewDataSource {
         if let posterURL = movie.lowResPosterURL(){
             cell.moviePosterImage.setImageWithURL(posterURL)
         }
-        
         return cell
-    }
-    
-    //New
-    // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == detailSegueId {
-            if let destination = segue.destinationViewController as? MovieDetailViewController {
-                if let indexPath = self.moviesTableView.indexPathForSelectedRow{
-                    destination.movie = movies[indexPath.row]
-                    self.moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
-                }
-                destination.hidesBottomBarWhenPushed = true
-            }
-        }
     }
     
     func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
@@ -143,7 +210,3 @@ extension MoviesViewController:UITableViewDataSource {
 
 extension MoviesViewController: UITableViewDelegate {
 }
-
-
-
-
