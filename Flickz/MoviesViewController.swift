@@ -29,18 +29,23 @@ class MoviesViewController: UIViewController {
         super.viewDidLoad()
         hideErrorView()
         initMovieTable()
+        initRefreshControl()
         loadMovies()
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
-        self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
     }
-
+    
     func initMovieTable(){
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
         moviesTableView.estimatedRowHeight = 200
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+    }
+    
+    func initRefreshControl(){
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.cyanColor()
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
     }
     
     func hideErrorView(){
