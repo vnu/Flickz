@@ -13,18 +13,17 @@ class MoviesAPI {
     //Singleton Class
     static let sharedInstance = MoviesAPI()
     
-    private let persistencyManager: PersistencyManager
     private let httpClient: HTTPClient
     private let isOnline: Bool
     
     init() {
-        persistencyManager = PersistencyManager()
         httpClient = HTTPClient()
         isOnline = false
     }
     
-    func getMovies() -> [Movie] {
-        return [] //persistencyManager.getAlbums()
+    func fetchMovies(moviesType: String, successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
+        let url = httpClient.buildUrl(moviesType)
+        httpClient.fetch(url, successCallback: successCallback, error: errorCallback)
     }
     
     func fetchNowPlayingMovies(successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
