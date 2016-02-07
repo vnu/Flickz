@@ -111,7 +111,12 @@ class MoviesViewController: UIViewController {
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.cyanColor()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
-        self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
+        addRefreshSubView()
+    }
+    
+    func addRefreshSubView(){
+        isGridView() ? self.moviesCollectionView.insertSubview(refreshControl, atIndex: 0) :
+            self.moviesTableView.insertSubview(refreshControl, atIndex: 0)
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -147,6 +152,7 @@ class MoviesViewController: UIViewController {
             moviesTableView.hidden = true
         }
         setSwitchBtnImage()
+        addRefreshSubView()
     }
     
     //Search Bar
@@ -167,9 +173,6 @@ class MoviesViewController: UIViewController {
     func cancelSearch(){
         setupSearchView()
     }
-    // in viewWillDisappear
-
-    
     
     //Segue into Detail View
     
