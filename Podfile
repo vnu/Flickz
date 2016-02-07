@@ -9,6 +9,7 @@ use_frameworks!  # Instruct CocoaPods to use dynamic frameworks instead of stati
 target 'Flickz' do
 
 pod 'AFNetworking', '~> 3.0'
+pod 'MBProgressHUD'
 
 end
 
