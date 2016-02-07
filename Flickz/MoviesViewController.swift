@@ -14,15 +14,16 @@ import MBProgressHUD
 class MoviesViewController: UIViewController {
     
     
+    private var movies = [Movie]()
+    var refreshControl:UIRefreshControl!
+    var initialLoad:Bool = true
+    var moviesType:String!
+    
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
     let detailSegueId:String = "MovieDetailSegue"
     
     @IBOutlet weak var errorView: UIView!
-    private var movies = [Movie]()
-    var refreshControl:UIRefreshControl!
-    var initialLoad:Bool = true
-    
     @IBOutlet weak var moviesTableView: UITableView!
     
     override func viewDidLoad() {
@@ -62,9 +63,12 @@ class MoviesViewController: UIViewController {
     }
     
     func loadMovies(){
-        MoviesAPI.sharedInstance.fetchNowPlayingMovies(updateMovieTable, errorCallback: showErrorView)
+        if let moviesType = moviesType{
+            MoviesAPI.sharedInstance.fetchMovies(moviesType, successCallback: updateMovieTable, errorCallback: showErrorView)
+        }
     }
     
+    //Callback view after Network success
     func updateMovieTable(fetchedMovies: [Movie]){
         hideErrorView()
         self.movies = fetchedMovies
@@ -114,6 +118,7 @@ extension MoviesViewController:UITableViewDataSource {
                     destination.movie = movies[indexPath.row]
                     self.moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
                 }
+                destination.hidesBottomBarWhenPushed = true
             }
         }
     }

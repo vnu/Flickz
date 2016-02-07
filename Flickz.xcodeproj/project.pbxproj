@@ -17,7 +17,6 @@
 		E407E21F1C65C8A2001676B5 /* MoviesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E21E1C65C8A2001676B5 /* MoviesAPI.swift */; };
 		E407E2241C65E485001676B5 /* MovieOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E2221C65E485001676B5 /* MovieOverviewCell.swift */; };
 		E407E2251C65E485001676B5 /* MovieOverviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E407E2231C65E485001676B5 /* MovieOverviewCell.xib */; };
-		E407E2271C665CC3001676B5 /* PersistencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E2261C665CC3001676B5 /* PersistencyManager.swift */; };
 		E407E2291C665CE0001676B5 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E2281C665CE0001676B5 /* HTTPClient.swift */; };
 		E407E22B1C66A4CB001676B5 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E22A1C66A4CB001676B5 /* MovieDetailViewController.swift */; };
 /* End PBXBuildFile section */
@@ -36,7 +35,6 @@
 		E407E21E1C65C8A2001676B5 /* MoviesAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesAPI.swift; sourceTree = "<group>"; };
 		E407E2221C65E485001676B5 /* MovieOverviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieOverviewCell.swift; sourceTree = "<group>"; };
 		E407E2231C65E485001676B5 /* MovieOverviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieOverviewCell.xib; sourceTree = "<group>"; };
-		E407E2261C665CC3001676B5 /* PersistencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistencyManager.swift; sourceTree = "<group>"; };
 		E407E2281C665CE0001676B5 /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		E407E22A1C66A4CB001676B5 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
 		FE08B41B3B108B982748BCD6 /* Pods_Flickz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Flickz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,7 +124,6 @@
 			isa = PBXGroup;
 			children = (
 				E407E21E1C65C8A2001676B5 /* MoviesAPI.swift */,
-				E407E2261C665CC3001676B5 /* PersistencyManager.swift */,
 				E407E2281C665CE0001676B5 /* HTTPClient.swift */,
 			);
 			name = API;
@@ -273,7 +270,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E407E2051C65B3A6001676B5 /* MoviesViewController.swift in Sources */,
-				E407E2271C665CC3001676B5 /* PersistencyManager.swift in Sources */,
 				E407E2031C65B3A6001676B5 /* AppDelegate.swift in Sources */,
 				E407E2291C665CE0001676B5 /* HTTPClient.swift in Sources */,
 				E407E22B1C66A4CB001676B5 /* MovieDetailViewController.swift in Sources */,
