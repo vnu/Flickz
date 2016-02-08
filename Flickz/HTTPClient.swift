@@ -64,6 +64,37 @@ class HTTPClient {
         task.resume()
     }
     
+    
+    //TODO: Refactor this and move the fetch logic to HTTPClient
+    func fetchPosterImage(movie: Movie, movieDetailPosterImage: UIImageView){
+        if let lowPosterURL = movie.lowResPosterURL(){
+            let lowResPosterURLRequest = NSURLRequest(URL: lowPosterURL)
+            movieDetailPosterImage.setImageWithURLRequest(lowResPosterURLRequest, placeholderImage: nil,
+                success: {(lowResPosterURLRequest, lowResPosterURLResponse, lowResPosterImage) -> Void in
+                    movieDetailPosterImage.alpha = 0.0
+                    movieDetailPosterImage.image = lowResPosterImage
+                    
+                    UIView.animateWithDuration(0.3, animations: {() -> Void in
+                        movieDetailPosterImage.alpha = 1.0
+                        }, completion: {(success) -> Void in
+                            if let highPosterURL = movie.highResPosterURL(){
+                                let highResPosterURLRequest = NSURLRequest(URL: highPosterURL)
+                                movieDetailPosterImage.setImageWithURLRequest(highResPosterURLRequest, placeholderImage: nil,
+                                    success: {(highResPosterURLRequest, highResPosterURLResponse, highResPosterImage) -> Void in
+                                        movieDetailPosterImage.image = highResPosterImage;
+                                    }, failure: { (highResPosterURLRequest, highResPosterURLResponse, error) -> Void in
+                                        NSLog("High Res Image Request failed")
+                                })
+                            }
+                    })
+                    
+                }, failure: { (lowResPosterURLRequest, lowResPosterURLResponse, error) -> Void in
+                    NSLog("Low Res Image Request failed")
+            })
+        }
+    }
+
+    
     //Fetch Image
     
 }

@@ -40,46 +40,15 @@ class MovieDetailViewController: UIViewController {
         self.movieOverviewLabel.text = movie.overview
         self.movieOverviewLabel.sizeToFit()
         self.movieRatingLabel.text = "\(String(format:"%.1f", movie.voteAverage))"
-        loadPosterImage()
+        MoviesAPI.sharedInstance.loadPosterImage(movie, posterImage: self.movieDetailPosterImage)
     }
 
     func setContentSize(){
         let contentWidth = movieDetailScrollView.bounds.width
-        let contentHeight = movieDetailScrollView.bounds.height + movieOverviewLabel.frame.height
+        let contentHeight = movieDetailScrollView.bounds.height + movieDescriptionView.frame.height
         movieDetailScrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
     }
-    
-    //TODO: Refactor this and move the fetch logic to HTTPClient
-    func loadPosterImage(){
-        if let lowPosterURL = self.movie.lowResPosterURL(){
-            let lowResPosterURLRequest = NSURLRequest(URL: lowPosterURL)
-            self.movieDetailPosterImage.setImageWithURLRequest(lowResPosterURLRequest, placeholderImage: nil,
-                success: {(lowResPosterURLRequest, lowResPosterURLResponse, lowResPosterImage) -> Void in
-                    self.movieDetailPosterImage.alpha = 0.0
-                    self.movieDetailPosterImage.image = lowResPosterImage
-                    
-                    UIView.animateWithDuration(0.3, animations: {() -> Void in
-                        self.movieDetailPosterImage.alpha = 1.0
-                        }, completion: {(success) -> Void in
-                            if let highPosterURL = self.movie.highResPosterURL(){
-                            let highResPosterURLRequest = NSURLRequest(URL: highPosterURL)
-                            self.movieDetailPosterImage.setImageWithURLRequest(highResPosterURLRequest, placeholderImage: nil,
-                                success: {(highResPosterURLRequest, highResPosterURLResponse, highResPosterImage) -> Void in
-                                    self.movieDetailPosterImage.image = highResPosterImage;
-                                }, failure: { (highResPosterURLRequest, highResPosterURLResponse, error) -> Void in
-                                    NSLog("High Res Image Request failed")
-                            })
-                        }
-                    })
-                    
-                }, failure: { (lowResPosterURLRequest, lowResPosterURLResponse, error) -> Void in
-                    NSLog("Low Res Image Request failed")
-            })
-        }
-    }
-
-
-    /*
+     /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

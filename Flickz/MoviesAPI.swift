@@ -26,6 +26,10 @@ class MoviesAPI {
         httpClient.fetch(url, successCallback: successCallback, error: errorCallback)
     }
     
+    func loadPosterImage(movie: Movie, posterImage: UIImageView){
+        httpClient.fetchPosterImage(movie,movieDetailPosterImage: posterImage)
+    }
+    
     func fetchNowPlayingMovies(successCallback: ([Movie]) -> Void, errorCallback: (NSError?) -> Void){
         let url = httpClient.buildUrl("now_playing")
         httpClient.fetch(url, successCallback: successCallback, error: errorCallback)

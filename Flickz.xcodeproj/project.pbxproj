@@ -19,6 +19,7 @@
 		E407E2251C65E485001676B5 /* MovieOverviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E407E2231C65E485001676B5 /* MovieOverviewCell.xib */; };
 		E407E2291C665CE0001676B5 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E2281C665CE0001676B5 /* HTTPClient.swift */; };
 		E407E22B1C66A4CB001676B5 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E22A1C66A4CB001676B5 /* MovieDetailViewController.swift */; };
+		E407E22D1C67C95F001676B5 /* MoviePosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E22C1C67C95F001676B5 /* MoviePosterCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		E407E2231C65E485001676B5 /* MovieOverviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieOverviewCell.xib; sourceTree = "<group>"; };
 		E407E2281C665CE0001676B5 /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		E407E22A1C66A4CB001676B5 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
+		E407E22C1C67C95F001676B5 /* MoviePosterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviePosterCell.swift; sourceTree = "<group>"; };
 		FE08B41B3B108B982748BCD6 /* Pods_Flickz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Flickz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -132,6 +134,7 @@
 		E407E21A1C65C2F8001676B5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E407E22C1C67C95F001676B5 /* MoviePosterCell.swift */,
 				E407E2221C65E485001676B5 /* MovieOverviewCell.swift */,
 				E407E2231C65E485001676B5 /* MovieOverviewCell.xib */,
 			);
@@ -274,6 +277,7 @@
 				E407E2291C665CE0001676B5 /* HTTPClient.swift in Sources */,
 				E407E22B1C66A4CB001676B5 /* MovieDetailViewController.swift in Sources */,
 				E407E2241C65E485001676B5 /* MovieOverviewCell.swift in Sources */,
+				E407E22D1C67C95F001676B5 /* MoviePosterCell.swift in Sources */,
 				E407E2181C65BFD3001676B5 /* Movie.swift in Sources */,
 				E407E21F1C65C8A2001676B5 /* MoviesAPI.swift in Sources */,
 			);
