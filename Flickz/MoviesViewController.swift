@@ -25,6 +25,8 @@ class MoviesViewController: UIViewController {
     var currentViewType:String!
     var searchBar: UISearchBar!
     
+    var filteredMovies = [Movie]()
+    
     //Table view cell
     let tableCellId:String = "vnu.com.movieOverviewCell"
     let detailSegueId:String = "MovieDetailSegue"
@@ -60,6 +62,7 @@ class MoviesViewController: UIViewController {
         moviesTableView.delegate = self
         moviesCollectionView.dataSource = self
         moviesCollectionView.delegate = self
+
         
         //Search
         searchBtn = UIBarButtonItem(image: UIImage(named: "search"), style: UIBarButtonItemStyle.Plain, target: self, action: "searchTapped")
@@ -84,6 +87,7 @@ class MoviesViewController: UIViewController {
     func updateMovieTable(fetchedMovies: [Movie]){
         hideErrorView()
         self.movies = fetchedMovies
+        filteredMovies = movies
         moviesCollectionView!.reloadData()
         moviesTableView!.reloadData()
         hideProgressBar()
@@ -166,11 +170,15 @@ class MoviesViewController: UIViewController {
     func searchTapped(){
         self.navigationItem.rightBarButtonItem  = cancelSearchBtn
         searchBar = UISearchBar(frame: CGRectMake(0.0, -80.0, 320.0, 44.0))
+        searchBar.delegate = self
         navigationController?.navigationBar.addSubview(searchBar)
         searchBar.frame = CGRectMake(0.0, 0, 250, 44)
+        searchBar.becomeFirstResponder()
     }
     
     func cancelSearch(){
+        searchBar.text = ""
+        updateSearchViewFor(searchBar.text!)
         setupSearchView()
     }
     
@@ -182,7 +190,7 @@ class MoviesViewController: UIViewController {
         if segue.identifier == detailSegueId {
             if let destination = segue.destinationViewController as? MovieDetailViewController {
                 if let indexRow = getIndexPath(sender){
-                    destination.movie = movies[indexRow]
+                    destination.movie = filteredMovies[indexRow]
                 }
                 destination.hidesBottomBarWhenPushed = true
             }
@@ -213,12 +221,12 @@ class MoviesViewController: UIViewController {
 
 extension MoviesViewController:UICollectionViewDataSource{
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        return filteredMovies.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(gridCellId, forIndexPath: indexPath) as! MoviePosterCell
-        let movie = movies[indexPath.item]
+        let movie = filteredMovies[indexPath.item]
         MoviesAPI.sharedInstance.loadPosterImage(movie, posterImage: cell.moviePosterImage)
         return cell
     }
@@ -226,6 +234,7 @@ extension MoviesViewController:UICollectionViewDataSource{
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let selectedCell = collectionView.cellForItemAtIndexPath(indexPath) as! MoviePosterCell
         self.performSegueWithIdentifier(detailSegueId, sender: selectedCell)
+        cancelSearch()
     }
     
 }
@@ -234,15 +243,38 @@ extension MoviesViewController:UICollectionViewDelegate{
     
 }
 
+extension MoviesViewController:UISearchBarDelegate{
+    
+    func updateSearchViewFor(searchText: String){
+        if searchText.isEmpty {
+            filteredMovies = movies
+        } else {
+            filteredMovies = movies.filter({(movie: Movie) -> Bool in
+                if movie.title.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil {
+                    return true
+                } else {
+                    return false
+                }
+            })
+        }
+        self.moviesTableView.reloadData()
+        self.moviesCollectionView.reloadData()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        updateSearchViewFor(searchText)
+    }
+}
+
 //Table View
 extension MoviesViewController:UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return filteredMovies.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableCellId, forIndexPath: indexPath) as! MovieOverviewCell
-        let movie = movies[indexPath.row]
+        let movie = filteredMovies[indexPath.row]
         cell.selectionStyle = .None
         cell.movieTitleLabel.text = movie.title
         cell.movieOverviewLabel.text = movie.overview
@@ -265,6 +297,7 @@ extension MoviesViewController:UITableViewDataSource {
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as!MovieOverviewCell
         self.performSegueWithIdentifier(detailSegueId, sender: selectedCell)
         selectedCell.movieTitleLabel.textColor = UIColor.cyanColor()
+        cancelSearch()
         
     }
 }
