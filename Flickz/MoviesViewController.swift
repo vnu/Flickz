@@ -57,7 +57,8 @@ class MoviesViewController: UIViewController {
         
         //set table and collection datasource and delegates
         moviesTableView.registerNib(UINib(nibName: "MovieOverviewCell", bundle: nil), forCellReuseIdentifier: tableCellId)
-        moviesTableView.estimatedRowHeight = 200
+        moviesTableView.estimatedRowHeight = 300
+        moviesTableView.rowHeight = 200
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
         moviesCollectionView.dataSource = self
