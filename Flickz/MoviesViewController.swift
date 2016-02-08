@@ -163,6 +163,8 @@ class MoviesViewController: UIViewController {
     func setupSearchView(){
         self.navigationItem.rightBarButtonItem = searchBtn
         if let searchBar = searchBar{
+            searchBar.text = ""
+            updateSearchViewFor(searchBar.text!)
             searchBar.removeFromSuperview()
         }
     }
@@ -177,8 +179,6 @@ class MoviesViewController: UIViewController {
     }
     
     func cancelSearch(){
-        searchBar.text = ""
-        updateSearchViewFor(searchBar.text!)
         setupSearchView()
     }
     
