@@ -45,7 +45,7 @@ class MovieDetailViewController: UIViewController {
 
     func setContentSize(){
         let contentWidth = movieDetailScrollView.bounds.width
-        let contentHeight = movieDetailScrollView.bounds.height + movieOverviewLabel.frame.height
+        let contentHeight = movieDetailScrollView.bounds.height + movieDescriptionView.frame.height
         movieDetailScrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
     }
      /*
